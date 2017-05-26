@@ -5,16 +5,10 @@ merged:
 
     $ git blast
     * master 33 minutes ago
-      david 4 days ago [M]
-      unholy-david-payments 4 days ago
-      payments 5 days ago [M]
-      ask-inst-type 7 days ago
-      legacy 2 weeks ago
-      archive 2 weeks ago
-      upload 3 weeks ago
-      david-old 4 months ago
-      dbscan 5 months ago
-      matrix-fun 5 months ago
+      some-feature 4 days ago [M]
+      dev-branch 4 days ago
+      legacy-branch 5 days ago [M]
+      another-feature 4 months ago
 """
 
 import subprocess as sp
