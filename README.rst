@@ -16,4 +16,13 @@ git-blast: show git branches sorted by last commit date
 Installation
 ============
 
-Put ``git-blast`` somewhere in ``$PATH``.
+With `Homebrew`__::
+
+    $ brew install wolever/git-blast/git-blast
+
+__ https://brew.sh/
+
+Manually::
+
+    $ curl https://raw.githubusercontent.com/wolever/git-blast/master/git-blast -O /usr/local/bin/git-blast
+    $ chmod +x /usr/local/bin/git-blast
