@@ -26,6 +26,9 @@ parser.add_argument(
     "-a", "--all", action="store_true",
     help="Show all refs, not just local heads (equivilent to `git blast /`)",
 )
+parser.add_argument(
+    "-n", type=int, default=None, help="Number of branches to show (use 0 to disable)",
+)
 parser.add_argument("PATTERN", nargs="?", default="heads/", help=(
     "Show refs matching PATTERN. Use `/` for all refs, tags/` for tags, "
     "`remotes/` for all remote branches, and `origin` for branches on the "
@@ -35,6 +38,9 @@ parser.add_argument("PATTERN", nargs="?", default="heads/", help=(
 ))
 
 def main(args):
+    if args.n is None and not args.all:
+        args.n = 30
+
     cur_branch = xcall("git rev-parse --abbrev-ref HEAD".split()).strip()
     merged_branches = set([
         x.split()[-1] for x
@@ -52,7 +58,11 @@ def main(args):
         "refs/%s" %(pattern, ),
         "--format=%(refname)%09%(committerdate:relative)",
     ])
-    for line in by_date.splitlines():
+    lines = by_date.splitlines()
+    for idx, line in enumerate(lines):
+        if args.n and idx >= args.n:
+            break
+
         branch, _, date = line.partition("\t")
 
         # Take out the initial refs/ and possibly refs/heads/ from the branch
@@ -70,6 +80,10 @@ def main(args):
         if branch in merged_branches and branch != cur_branch:
             output += " [%sM%s]" %(C_GREEN, C_RESET)
         print(output)
+
+    if args.n and len(lines) >= args.n:
+        print "(... and %s more ...)" %(len(lines) - args.n)
+
 
 if __name__ == "__main__":
     args = parser.parse_args()
