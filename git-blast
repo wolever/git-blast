@@ -11,8 +11,18 @@ merged:
       another-feature 4 months ago
 """
 
+import os
 import argparse
 import subprocess as sp
+
+def get_terminal_size():
+    # copy-paste from StackOverflow: https://stackoverflow.com/a/3010495/71522
+    # No idea if this will work on Windows and friends; PRs very appreciated
+    import fcntl, termios, struct
+    th, tw, hp, wp = struct.unpack('HHHH',
+        fcntl.ioctl(0, termios.TIOCGWINSZ,
+        struct.pack('HHHH', 0, 0, 0, 0)))
+    return tw, th
 
 def xcall(cmd):
     return sp.check_output(cmd).decode("utf-8")
@@ -20,6 +30,7 @@ def xcall(cmd):
 C_GREEN = '\033[0;32m'
 C_BLUE = '\033[0;34m'
 C_RESET = '\033[0;0m'
+C_BLACK = '\033[30;1m'
 
 parser = argparse.ArgumentParser(description="Show git branches, sorted by last commit date")
 parser.add_argument(
@@ -56,14 +67,15 @@ def main(args):
     by_date = xcall([
         "git", "for-each-ref", "--sort=-committerdate",
         "refs/%s" %(pattern, ),
-        "--format=%(refname)%09%(committerdate:relative)",
+        "--format=%(refname)%09%(committerdate:relative)%09%(authorname) %(authoremail)%09%(contents:subject)",
     ])
     lines = by_date.splitlines()
+    term_width, _ = get_terminal_size()
     for idx, line in enumerate(lines):
         if args.n and idx >= args.n:
             break
 
-        branch, _, date = line.partition("\t")
+        branch, _, rest = line.partition("\t")
 
         # Take out the initial refs/ and possibly refs/heads/ from the branch
         # name
@@ -76,9 +88,14 @@ def main(args):
             output += "* %s%s" %(C_GREEN, branch)
         else:
             output += "  %s" %(branch, )
+        (date, author, subject) = rest.split("\t")
         output += " %s%s%s" %(C_BLUE, date, C_RESET)
         if branch in merged_branches and branch != cur_branch:
             output += " [%sM%s]" %(C_GREEN, C_RESET)
+        output += " %s%s: %s" %(C_BLACK, author, subject)
+        if term_width and term_width < len(output):
+            output = output[:term_width - 3] + "..."
+        output += C_RESET
         print(output)
 
     if args.n and len(lines) >= args.n:
