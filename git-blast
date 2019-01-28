@@ -99,7 +99,7 @@ def main(args):
         print(output)
 
     if args.n and len(lines) >= args.n:
-        print "(... and %s more ...)" %(len(lines) - args.n)
+        print("(... and %s more ...)" %(len(lines) - args.n))
 
 
 if __name__ == "__main__":
