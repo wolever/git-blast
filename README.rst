@@ -17,5 +17,5 @@ __ https://brew.sh/
 
 Manually::
 
-    $ curl https://raw.githubusercontent.com/wolever/git-blast/master/git-blast -O /usr/local/bin/git-blast
+    $ curl https://raw.githubusercontent.com/wolever/git-blast/master/git-blast -o /usr/local/bin/git-blast
     $ chmod +x /usr/local/bin/git-blast
