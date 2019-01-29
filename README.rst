@@ -1,7 +1,7 @@
 git-blast: show git branches sorted by last commit date
 =======================================================
 
-``git-blast`` (Brach LAST) shows git branches ordered by the date of the last commit, including the committer and commit message:
+``git-blast`` (Branch LAST) shows git branches ordered by the date of the last commit, including the committer and commit message:
 
 .. image:: https://i.imgur.com/2VhqNWT.png
 
