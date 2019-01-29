@@ -11,6 +11,8 @@ merged:
       another-feature 4 months ago
 """
 
+from __future__ import print_function
+
 import os
 import argparse
 import subprocess as sp
@@ -99,7 +101,7 @@ def main(args):
         print(output)
 
     if args.n and len(lines) >= args.n:
-        print "(... and %s more ...)" %(len(lines) - args.n)
+        print("(... and %s more ...)" %(len(lines) - args.n))
 
 
 if __name__ == "__main__":
